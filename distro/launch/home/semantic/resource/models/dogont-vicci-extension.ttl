@@ -1,0 +1,214 @@
+# baseURI: http://openhab-semantic/0.1/dogont-vicci-extension
+# imports: http://elite.polito.it/ontologies/dogont.owl
+# prefix: vicci
+
+@prefix : <http://openhab-semantic/0.1/dogont-vicci-extension#> .
+@prefix dogont: <http://elite.polito.it/ontologies/dogont.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vicci: <http://openhab-semantic/0.1/dogont-vicci-extension#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://openhab-semantic/0.1/dogont-vicci-extension>
+  rdf:type owl:Ontology ;
+  owl:imports <http://elite.polito.it/ontologies/dogont.owl> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+vicci:AvailabilityState
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:DiscreteState ;
+.
+vicci:AvailabilityStateValue
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:DiscreteValue ;
+.
+vicci:BloodOxygenSaturationMeasurementState
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:ContinuousState ;
+.
+vicci:BloodOxygenSaturationMeasuringFunctionality
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:ContinuousControlFunctionality ;
+.
+vicci:BloodOxygenSaturationStateValue
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:ContinuousValue ;
+.
+vicci:CallHelpFunctionality
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:DiscreteNotificationFunctionality ;
+.
+vicci:CallHelpState
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:DiscreteState ;
+.
+vicci:Health
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:Controllable ;
+.
+vicci:HealthMonitor
+  rdf:type owl:Class ;
+  rdfs:subClassOf vicci:Health ;
+.
+vicci:HeartRateMeasurementState
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:ContinuousState ;
+.
+vicci:HeartRateMeasuringFunctionality
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:ContinuousControlFunctionality ;
+.
+vicci:HeartRateStateValue
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:ContinuousValue ;
+.
+vicci:POI
+  rdf:type owl:Class ;
+  rdfs:comment "Point of Interest is a helper, to locate the position of items" ;
+  rdfs:subClassOf dogont:BuildingEnvironment ;
+.
+vicci:Person
+  rdf:type owl:Class ;
+  rdfs:subClassOf vicci:ProteusThings ;
+.
+vicci:ProteusThings
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:Controllable ;
+.
+vicci:Robot
+  rdf:type owl:Class ;
+  rdfs:subClassOf vicci:ProteusThings ;
+.
+vicci:RobotMovementFunctionality
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:ContinuousControlFunctionality ;
+.
+vicci:RobotMovementState
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:DiscreteState ;
+.
+vicci:RobotMovementStateValue
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:DiscreteValue ;
+.
+vicci:RobotPosition
+  rdf:type owl:Class ;
+  rdfs:comment "The position of a vicci robot" ;
+  rdfs:subClassOf owl:Thing ;
+.
+vicci:RobotPositionCalculatingFunctionality
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:ContinuousControlFunctionality ;
+.
+vicci:RobotPositionState
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:DiscreteState ;
+.
+vicci:RobotPositionStateValue
+  rdf:type owl:Class ;
+  rdfs:subClassOf dogont:DiscreteValue ;
+.
+vicci:RobotSimplePositionState
+  rdf:type owl:Class ;
+  rdfs:label "Simple Position for Robots (only x, y needed and less precission)" ;
+  rdfs:subClassOf dogont:DiscreteState ;
+.
+vicci:RobotSimplePositionStateValue
+  rdf:type owl:Class ;
+  rdfs:label "Simple Position for Robots (only x, y needed and less precission)" ;
+  rdfs:subClassOf vicci:RobotPositionStateValue ;
+.
+vicci:hasAge
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          vicci:Person
+        ) ;
+    ] ;
+  rdfs:range xsd:string ;
+.
+vicci:hasFirstname
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          vicci:Person
+        ) ;
+    ] ;
+  rdfs:range xsd:string ;
+.
+vicci:hasGender
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          vicci:Person
+        ) ;
+    ] ;
+  rdfs:range xsd:string ;
+.
+vicci:hasHealthMonitor
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          vicci:Person
+        ) ;
+    ] ;
+  rdfs:range vicci:HealthMonitor ;
+.
+vicci:hasLastname
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          vicci:Person
+        ) ;
+    ] ;
+  rdfs:range xsd:string ;
+.
+vicci:hasOrientation
+  rdf:type owl:FunctionalProperty ;
+  rdfs:domain [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          vicci:RobotPosition
+        ) ;
+    ] ;
+  rdfs:range xsd:string ;
+.
+vicci:hasPosition
+  rdf:type owl:FunctionalProperty ;
+  rdfs:domain [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          vicci:RobotPosition
+        ) ;
+    ] ;
+  rdfs:range xsd:string ;
+.
+vicci:hasRobotPosition
+  rdf:type owl:FunctionalProperty ;
+  rdfs:comment "Gives the location for a vicci robot (position + orientation)" ;
+  rdfs:domain [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          dogont:BuildingThing
+          dogont:BuildingEnvironment
+          vicci:POI
+        ) ;
+    ] ;
+  rdfs:range vicci:RobotPosition ;
+.
+vicci:isAvailable
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          vicci:ProteusThings
+        ) ;
+    ] ;
+  rdfs:range xsd:boolean ;
+.
