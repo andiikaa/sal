@@ -1,0 +1,1 @@
+https://github.com/openhab/openhab-core/tree/master/bundles/org.openhab.core.io.rest
