@@ -1,6 +1,10 @@
 package org.openhab.io.semantic.tests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openhab.io.semantic.core.SemanticService;
+import org.openhab.io.semantic.core.model.SimpleDeviceModel.DeviceInfo;
 import org.openhab.io.semantic.core.util.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,8 +82,22 @@ public class SemanticServiceTestImpl implements SemanticService {
 
     @Override
     public boolean executeUpdate(String updateStmt) {
-        // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public List<DeviceInfo> getAllDeviceInfos() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<DeviceInfo> getDeviceInfoForId(String deviceId) {
+        return null;
+    }
+
+    @Override
+    public String mergeDevices(String deviceId1, String deviceId2) {
+        return null;
     }
 
 }

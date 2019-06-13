@@ -1,6 +1,7 @@
 package org.openhab.io.semantic.dogont;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.events.ItemCommandEvent;
@@ -12,8 +13,10 @@ import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.TypeParser;
 import org.openhab.io.semantic.core.SemanticService;
+import org.openhab.io.semantic.core.model.SimpleDeviceModel.DeviceInfo;
 import org.openhab.io.semantic.core.util.QueryResult;
 import org.openhab.io.semantic.dogont.internal.SemanticServiceImplBase;
+import org.openhab.io.semantic.dogont.internal.util.DeviceInfoService;
 import org.openhab.io.semantic.dogont.internal.util.QueryResource;
 import org.openhab.io.semantic.dogont.internal.util.SemanticConstants;
 import org.slf4j.Logger;
@@ -43,6 +46,8 @@ import com.hp.hpl.jena.update.UpdateRequest;
  */
 public final class SemanticServiceImpl extends SemanticServiceImplBase implements SemanticService {
     private static final Logger logger = LoggerFactory.getLogger(SemanticServiceImpl.class);
+
+    private DeviceInfoService deviceInfoService = new DeviceInfoService();
 
     @Override
     public QueryResult executeSelect(String queryAsString) {
@@ -324,5 +329,20 @@ public final class SemanticServiceImpl extends SemanticServiceImplBase implement
         }
 
         return success;
+    }
+
+    @Override
+    public List<DeviceInfo> getAllDeviceInfos() {
+        return deviceInfoService.getDeviceInfos();
+    }
+
+    @Override
+    public List<DeviceInfo> getDeviceInfoForId(String deviceId) {
+        return deviceInfoService.getDeviceInfos();
+    }
+
+    @Override
+    public String mergeDevices(String deviceId1, String deviceId2) {
+        return null;
     }
 }

@@ -1,5 +1,8 @@
 package org.openhab.io.semantic.core;
 
+import java.util.List;
+
+import org.openhab.io.semantic.core.model.SimpleDeviceModel.DeviceInfo;
 import org.openhab.io.semantic.core.util.QueryResult;
 
 /**
@@ -27,9 +30,9 @@ public interface SemanticService {
      *
      * @param queryAsString
      * @param withLatestValues
-     *            If set to true, this will add the current values of all items to their specific
-     *            stateValue in the ont model and then execute the query. This may take some time,
-     *            so set this to true, only if you need the current values.
+     *                             If set to true, this will add the current values of all items to their specific
+     *                             stateValue in the ont model and then execute the query. This may take some time,
+     *                             so set this to true, only if you need the current values.
      * @return
      */
     @Deprecated
@@ -51,9 +54,9 @@ public interface SemanticService {
      *
      * @param askAsString
      * @param withLatestValues
-     *            If set to true, this will add the current values of all items to their specific
-     *            stateValue in the ont model and then execute the query. This may take some time,
-     *            so set this to true, only if you need the current values.
+     *                             If set to true, this will add the current values of all items to their specific
+     *                             stateValue in the ont model and then execute the query. This may take some time,
+     *                             so set this to true, only if you need the current values.
      * @return
      */
     @Deprecated
@@ -63,7 +66,7 @@ public interface SemanticService {
      * Executes a update statement
      *
      * @param updateStmt
-     *            The update statement should also contain all prefixes, otherwise the execution will fail
+     *                       The update statement should also contain all prefixes, otherwise the execution will fail
      * @return true if execution was successful executed, otherwise false.
      */
     boolean executeUpdate(String updateStmt);
@@ -74,7 +77,7 @@ public interface SemanticService {
      * variable, than no command is send to the openhab event bus.
      *
      * @param command
-     *            the command as String. e.g. 'ON', 'OFF', 'TOGGLE', 'DOWN', 'UP'
+     *                          the command as String. e.g. 'ON', 'OFF', 'TOGGLE', 'DOWN', 'UP'
      * @param queryAsString
      * @return the result of the query
      */
@@ -100,7 +103,7 @@ public interface SemanticService {
      * Gets the Type of a given item.
      *
      * @param itemName
-     *            OpenHab Item Name
+     *                     OpenHab Item Name
      * @return
      */
     String getTypeName(String itemName);
@@ -109,7 +112,7 @@ public interface SemanticService {
      * Gets the location name of a given item.
      *
      * @param itemName
-     *            OpenHab Item Name
+     *                     OpenHab Item Name
      * @return
      */
     String getLocationName(String itemName);
@@ -150,5 +153,30 @@ public interface SemanticService {
      *         - thingName: the name of the type which encapsulates the sensor
      */
     QueryResult getAllSensors();
+
+    /**
+     * Gets all device infos. Merged super classes are not returned.
+     *
+     * @return
+     */
+    List<DeviceInfo> getAllDeviceInfos();
+
+    /**
+     * Gets device info for specific device.
+     * If more than one device info is returned, the device is merged in an other device.
+     *
+     * @param deviceId
+     * @return
+     */
+    List<DeviceInfo> getDeviceInfoForId(String deviceId);
+
+    /**
+     * Merge 2 devices
+     *
+     * @param deviceId1
+     * @param deviceId2
+     * @return id of the merged instance
+     */
+    String mergeDevices(String deviceId1, String deviceId2);
 
 }

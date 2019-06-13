@@ -3,6 +3,7 @@ package org.openhab.io.semantic.core.rest;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,6 +23,7 @@ import org.eclipse.smarthome.io.rest.RESTResource;
 import org.openhab.io.semantic.core.SemanticService;
 import org.openhab.io.semantic.core.internal.util.ConfigHelper;
 import org.openhab.io.semantic.core.internal.util.SemanticPostCommandBean;
+import org.openhab.io.semantic.core.model.SimpleDeviceModel.DeviceInfo;
 import org.openhab.io.semantic.core.util.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,6 +164,22 @@ public class SemanticResource implements RESTResource {
         ConfigHelper helper = new ConfigHelper();
         helper.addThingsAndItems(thingRegistry, itemRegistry);
         return helper.getAsString();
+    }
+
+    @GET
+    @Path("/deviceinfos")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Get all device infos")
+    public List<DeviceInfo> getDeviceInfos() {
+        return semanticService.getAllDeviceInfos();
+    }
+
+    @GET
+    @Path("/deviceinfos/{thingId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Get all device info for thing id")
+    public List<DeviceInfo> getDeviceInfoForId(@PathParam("thingId") String thingId) {
+        return semanticService.getDeviceInfoForId(thingId);
     }
 
     // writes text to a file

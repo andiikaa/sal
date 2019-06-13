@@ -66,6 +66,7 @@ Import-Package: io.swagger.annotations;version="1.5.4",
 Service-Component: OSGI-INF/semanticResource.xml,
  OSGI-INF/semanticConfigResource.xml
 Export-Package: org.openhab.io.semantic.core;uses:="org.eclipse.smarthome.core.items",
+ org.openhab.io.semantic.core.model,
  org.openhab.io.semantic.core.util
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
