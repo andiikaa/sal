@@ -1,5 +1,6 @@
 package org.openhab.io.semantic.dogont;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -278,7 +279,16 @@ public final class SemanticServiceImpl extends SemanticServiceImplBase implement
         return result;
     }
 
+    @Deprecated
     private QueryExecution getQueryExecution(String queryAsString, boolean withLatestValues) {
+        if (queryAsString == null || queryAsString.isEmpty()) {
+            return null;
+        }
+        Query query = QueryFactory.create(queryAsString);
+        return QueryExecutionFactory.create(query, getInstanceModel());
+    }
+
+    private QueryExecution getQueryExecution(String queryAsString) {
         if (queryAsString == null || queryAsString.isEmpty()) {
             return null;
         }
@@ -336,9 +346,40 @@ public final class SemanticServiceImpl extends SemanticServiceImplBase implement
         return deviceInfoService.getDeviceInfos();
     }
 
+    // TODO support merging
+    // device id could be something that is merged?
+    // we must also handle that
     @Override
     public List<DeviceInfo> getDeviceInfoForId(String deviceId) {
-        return deviceInfoService.getDeviceInfos();
+        String queryStr = QueryResource.getDeviceFunc(SemanticConstants.THING_PREFIX + deviceId);
+        List<String> funcs = getStateOrFuncOrBox(deviceId, "func", queryStr);
+        queryStr = QueryResource.getDeviceState(SemanticConstants.THING_PREFIX + deviceId);
+        List<String> states = getStateOrFuncOrBox(deviceId, "state", queryStr);
+        queryStr = QueryResource.getDeviceBoxes(SemanticConstants.THING_PREFIX + deviceId);
+        List<String> boxes = getStateOrFuncOrBox(deviceId, "box", queryStr);
+
+        DeviceInfo info = new DeviceInfo();
+
+        return new ArrayList<DeviceInfo>();
+    }
+
+    private List<String> getStateOrFuncOrBox(String deviceId, String fieldName, String qeryStr) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            openHabDataSet.begin(ReadWrite.READ);
+            QueryExecution queryExecution = getQueryExecution(qeryStr);
+            ResultSet rs = queryExecution.execSelect();
+            if (rs.hasNext()) {
+                list.add(rs.next().getResource("func").toString());
+            }
+            queryExecution.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            openHabDataSet.end();
+        }
+        return list;
     }
 
     @Override

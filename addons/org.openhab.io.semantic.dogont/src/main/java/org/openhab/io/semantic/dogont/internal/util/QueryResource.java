@@ -261,9 +261,9 @@ public class QueryResource {
      * Updates the thing location
      *
      * @param thingName
-     *            openHab Thing name
+     *                        openHab Thing name
      * @param locationUri
-     *            uri of location e.g. http://openhab...#location
+     *                        uri of location e.g. http://openhab...#location
      * @return
      */
     public static final String updateThingLocation(String thingName, String locationUri) {
@@ -288,7 +288,7 @@ public class QueryResource {
      * Deletes the existing Location from a thing
      *
      * @param thingName
-     *            openHab Thing name
+     *                      openHab Thing name
      * @return
      */
     public static final String deleteThingLocation(String thingName) {
@@ -444,6 +444,44 @@ public class QueryResource {
         builder.append(
                 "    bind(strafter(str(?oxygenState), '" + SemanticConstants.NS_AND_STATE_PREFIX + "') as ?oxygenUid)");
         builder.append("}}");
+        return builder.toString();
+    }
+
+    /**
+     * Query for getting device infos for specific thing
+     *
+     * @return
+     */
+    public static final String getDeviceFunc(String thingId) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Prefix);
+        builder.append("SELECT ?func ");
+        builder.append("WHERE {");
+        builder.append("  OPTIONAL { ?thing dogont:hasFunctionality ?func .} ");
+        builder.append("  FILTER(?thing = <http://openhab-semantic/0.1/instance#" + thingId + ">)");
+        builder.append("}");
+        return builder.toString();
+    }
+
+    public static final String getDeviceState(String thingId) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Prefix);
+        builder.append("SELECT ?state ");
+        builder.append("WHERE {");
+        builder.append("  OPTIONAL { ?thing dogont:hasState ?state . } ");
+        builder.append("  FILTER(?thing = <http://openhab-semantic/0.1/instance#" + thingId + ">)");
+        builder.append("}");
+        return builder.toString();
+    }
+
+    public static final String getDeviceBoxes(String thingId) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Prefix);
+        builder.append("SELECT ?box ");
+        builder.append("WHERE {");
+        builder.append("  OPTIONAL {?thing vicci:hasGroupBox ?box . } ");
+        builder.append("  FILTER(?thing = <http://openhab-semantic/0.1/instance#" + thingId + ">)");
+        builder.append("}");
         return builder.toString();
     }
 }

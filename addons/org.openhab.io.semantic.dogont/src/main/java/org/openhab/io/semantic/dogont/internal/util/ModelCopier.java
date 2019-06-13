@@ -53,8 +53,8 @@ public class ModelCopier {
 
         // only checks if the first group box _1 is present.
         // if not, all groupboxes are added
-        if (!instanceModelContainsGroupBox(templateName)) {
-            copyGroupBox(templateName);
+        if (!instanceModelContainsGroupBox(templateName, id)) {
+            copyGroupBox(templateName, id);
         }
 
         if (!instanceModelContainsState(element.getName())) {
@@ -116,13 +116,14 @@ public class ModelCopier {
      *
      * @param templateName e.g. tinkerforge_irTemp
      */
-    public void copyGroupBox(String templateName) {
+    public void copyGroupBox(String templateName, String id) {
         if (templateName == null) {
+            LOGGER.debug("skip from copy to sal");
             return;
         }
         String thingName = removeLastDelimiter(templateName);
         LOGGER.debug("try to copy groupBoxes for '{}' from template", thingName);
-        String query = getCopyGroupBoxQuery(thingName);
+        String query = getCopyGroupBoxQuery(thingName, id);
         executeUpdateAction(query);
     }
 
@@ -185,9 +186,9 @@ public class ModelCopier {
         return executeAskOnInstanceModel(query);
     }
 
-    private boolean instanceModelContainsGroupBox(String groupBoxName) {
+    private boolean instanceModelContainsGroupBox(String groupBoxName, String id) {
         String thingName = removeLastDelimiter(groupBoxName);
-        String query = getContainsQuery(SemanticConstants.GROUP_BOX_PREFIX, thingName + "_1");
+        String query = getContainsQuery(SemanticConstants.GROUP_BOX_PREFIX, thingName + "_1_" + id);
         return executeAskOnInstanceModel(query);
     }
 
@@ -213,8 +214,10 @@ public class ModelCopier {
         StringBuilder builder = new StringBuilder();
         builder.append("PREFIX dogont: <" + DogontSchema.NS + "> ");
         builder.append("PREFIX rdf: <" + SemanticConstants.NS_RDF_SYNTAX + "> ");
+        builder.append("PREFIX vicci: <" + SemanticConstants.NS_VICCI_EXTENSION + "> ");
         builder.append("INSERT { GRAPH <" + SemanticConstants.GRAPH_NAME_INSTANCE + "> { ");
         builder.append("  ?newState rdf:type ?stateType ; ");
+        builder.append("  vicci:isInGroupBox ?newBox ; ");
         builder.append("    dogont:hasStateValue [ ");
         builder.append("      rdf:type ?stateValueType; dogont:realStateValue ?realStateValue; ");
         builder.append("      dogont:unitOfMeasure ?unitOfMeasure  ] . ");
@@ -224,10 +227,13 @@ public class ModelCopier {
         builder.append("  ?stateValue rdf:type ?stateValueType . ");
         builder.append("  OPTIONAL {?stateValue dogont:realStateValue ?realStateValue. } ");
         builder.append("  OPTIONAL {?stateValue dogont:unitOfMeasure ?unitOfMeasure . } ");
+        builder.append("  OPTIONAL {?state vicci:isInGroupBox ?box . } ");
         builder.append("  FILTER( ?state = <" + SemanticConstants.NS_AND_STATE_PREFIX_TEMPLATE + stateName + ">) ");
         builder.append("  BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", ");
         builder.append("    STRAFTER (STR(?state),\"" + SemanticConstants.NS_TEMPLATE + "\"), \"_" + id
                 + "\")) AS ?newState) ");
+        builder.append("BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", STRAFTER (STR(?box),\"");
+        builder.append(SemanticConstants.NS_TEMPLATE + "\"), \"_" + id + "\")) AS ?newBox)");
         builder.append("}}");
         return builder.toString();
     }
@@ -236,11 +242,14 @@ public class ModelCopier {
         StringBuilder builder = new StringBuilder();
         builder.append("PREFIX dogont: <" + DogontSchema.NS + "> ");
         builder.append("PREFIX rdf: <" + SemanticConstants.NS_RDF_SYNTAX + "> ");
+        builder.append("PREFIX vicci: <" + SemanticConstants.NS_VICCI_EXTENSION + "> ");
         builder.append("INSERT { GRAPH <" + SemanticConstants.GRAPH_NAME_INSTANCE + "> { ");
-        builder.append("  ?newThing rdf:type ?thingType ; dogont:hasState ?newState . ");
+        builder.append("  ?newThing rdf:type ?thingType ; vicci:hasGroupBox ?newBox ; ");
+        builder.append("  dogont:hasState ?newState . ");
         builder.append("}} ");
         builder.append("WHERE { GRAPH <" + SemanticConstants.GRAPH_NAME_TEMPLATE + "> { ");
-        builder.append("  ?thing dogont:hasState ?state; rdf:type ?thingType. ");
+        builder.append("  ?thing dogont:hasState ?state; rdf:type ?thingType . ");
+        builder.append("  OPTIONAL {?thing vicci:hasGroupBox ?box . }");
         builder.append("  FILTER( ?state = <" + SemanticConstants.NS_AND_STATE_PREFIX_TEMPLATE + stateName + ">) ");
         builder.append("  BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", ");
         builder.append("    STRAFTER (STR(?thing),\"" + SemanticConstants.NS_TEMPLATE + "\"), \"_" + id
@@ -248,11 +257,13 @@ public class ModelCopier {
         builder.append("  BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", ");
         builder.append("    STRAFTER (STR(?state),\"" + SemanticConstants.NS_TEMPLATE + "\"), \"_" + id
                 + "\")) AS ?newState) ");
+        builder.append("BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", STRAFTER (STR(?box),\"");
+        builder.append(SemanticConstants.NS_TEMPLATE + "\"), \"_" + id + "\")) AS ?newBox)");
         builder.append("}}");
         return builder.toString();
     }
 
-    private static String getCopyGroupBoxQuery(String thingName) {
+    private static String getCopyGroupBoxQuery(String thingName, String id) {
         StringBuilder builder = new StringBuilder();
         builder.append("PREFIX dogont: <" + DogontSchema.NS + "> ");
         builder.append("PREFIX instance: <" + SemanticConstants.NS_INSTANCE + "> ");
@@ -269,8 +280,9 @@ public class ModelCopier {
         builder.append(" ?box rdf:type ?boxType .");
         builder.append(" ?box vicci:grouBoxName ?boxName ; vicci:iconName ?iconName .");
         builder.append("BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", STRAFTER (STR(?box),\"");
-        builder.append(SemanticConstants.NS_TEMPLATE + "\"))) AS ?newBox)");
+        builder.append(SemanticConstants.NS_TEMPLATE + "\"), \"_" + id + "\")) AS ?newBox)");
         builder.append("}}");
+
         return builder.toString();
     }
 
@@ -308,13 +320,16 @@ public class ModelCopier {
         StringBuilder builder = new StringBuilder();
         builder.append("PREFIX dogont: <" + DogontSchema.NS + "> ");
         builder.append("PREFIX rdf: <" + SemanticConstants.NS_RDF_SYNTAX + "> ");
+        builder.append("PREFIX vicci: <" + SemanticConstants.NS_VICCI_EXTENSION + "> ");
         builder.append("INSERT { GRAPH <" + SemanticConstants.GRAPH_NAME_INSTANCE + "> { ");
         builder.append("  ?newFunc rdf:type ?funcType . ");
+        builder.append("  ?newFunc vicci:isInGroupBox ?newBox . ");
         builder.append("  ?newFunc dogont:hasCommand ?newCommand . ");
         builder.append("}}");
         builder.append("WHERE { GRAPH <" + SemanticConstants.GRAPH_NAME_TEMPLATE + "> { ");
         builder.append("  ?func rdf:type ?funcType .");
         builder.append("  OPTIONAL { ?func dogont:hasCommand ?command. } ");
+        builder.append("  OPTIONAL { ?func vicci:isInGroupBox ?box . } ");
         builder.append(
                 "  FILTER( ?func = <" + SemanticConstants.NS_AND_FUNCTION_PREFIX_TEMPLATE + functionName + ">) ");
         builder.append("  BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", ");
@@ -322,6 +337,8 @@ public class ModelCopier {
                 "    STRAFTER (STR(?func),\"" + SemanticConstants.NS_TEMPLATE + "\"), \"_" + id + "\")) AS ?newFunc) ");
         builder.append("  BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", ");
         builder.append("    STRAFTER (STR(?command),\"" + SemanticConstants.NS_TEMPLATE + "\"))) AS ?newCommand) ");
+        builder.append("BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", STRAFTER (STR(?box),\"");
+        builder.append(SemanticConstants.NS_TEMPLATE + "\"), \"_" + id + "\")) AS ?newBox)");
         builder.append("}}");
         return builder.toString();
     }
@@ -343,11 +360,14 @@ public class ModelCopier {
         StringBuilder builder = new StringBuilder();
         builder.append("PREFIX dogont: <" + DogontSchema.NS + "> ");
         builder.append("PREFIX rdf: <" + SemanticConstants.NS_RDF_SYNTAX + "> ");
+        builder.append("PREFIX vicci: <" + SemanticConstants.NS_VICCI_EXTENSION + "> ");
         builder.append("INSERT { GRAPH <" + SemanticConstants.GRAPH_NAME_INSTANCE + "> { ");
-        builder.append("  ?newThing rdf:type ?thingType ; dogont:hasFunctionality ?newFunc . ");
+        builder.append("  ?newThing rdf:type ?thingType ; vicci:hasGroupBox ?newBox . ");
+        builder.append("  ?newThing dogont:hasFunctionality ?newFunc . ");
         builder.append("}} ");
         builder.append("WHERE { GRAPH <" + SemanticConstants.GRAPH_NAME_TEMPLATE + "> { ");
         builder.append("  ?thing dogont:hasFunctionality ?func; rdf:type ?thingType. ");
+        builder.append("  OPTIONAL { ?thing vicci:hasGroupBox ?box . } ");
         builder.append(
                 "  FILTER( ?func = <" + SemanticConstants.NS_AND_FUNCTION_PREFIX_TEMPLATE + functionName + ">) ");
         builder.append("  BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", ");
@@ -356,6 +376,8 @@ public class ModelCopier {
         builder.append("  BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", ");
         builder.append(
                 "    STRAFTER (STR(?func),\"" + SemanticConstants.NS_TEMPLATE + "\"), \"_" + id + "\")) AS ?newFunc) ");
+        builder.append("BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", STRAFTER (STR(?box),\"");
+        builder.append(SemanticConstants.NS_TEMPLATE + "\"), \"_" + id + "\")) AS ?newBox)");
         builder.append("}}");
         return builder.toString();
     }

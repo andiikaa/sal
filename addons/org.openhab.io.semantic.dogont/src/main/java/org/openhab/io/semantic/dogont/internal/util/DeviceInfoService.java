@@ -12,10 +12,14 @@ public class DeviceInfoService {
     private List<DeviceInfo> internalDeviceInfo;
 
     public DeviceInfoService() {
-        internalDeviceInfo = getDeviceInfos();
+        internalDeviceInfo = getDeviceInfosInternal();
     }
 
-    public List<DeviceInfo> getDeviceInfos() {
+    public List<DeviceInfo> getDeviceInfos(String thingId) {
+        return internalDeviceInfo;
+    }
+
+    private List<DeviceInfo> getDeviceInfosInternal() {
         List<DeviceInfo> infos = new ArrayList<>();
         infos.add(createTinkerforgeIRTempInfos());
         return infos;
