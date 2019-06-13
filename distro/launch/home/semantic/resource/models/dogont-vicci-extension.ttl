@@ -11,118 +11,134 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <http://openhab-semantic/0.1/dogont-vicci-extension>
-  rdf:type owl:Ontology ;
+  a owl:Ontology ;
   owl:imports <http://elite.polito.it/ontologies/dogont.owl> ;
   owl:versionInfo "Created with TopBraid Composer" ;
 .
 vicci:AvailabilityState
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:DiscreteState ;
 .
 vicci:AvailabilityStateValue
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:DiscreteValue ;
 .
 vicci:BloodOxygenSaturationMeasurementState
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:ContinuousState ;
 .
 vicci:BloodOxygenSaturationMeasuringFunctionality
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:ContinuousControlFunctionality ;
 .
 vicci:BloodOxygenSaturationStateValue
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:ContinuousValue ;
 .
 vicci:CallHelpFunctionality
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:DiscreteNotificationFunctionality ;
 .
 vicci:CallHelpState
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:DiscreteState ;
 .
+vicci:GroupBox
+  a owl:Class ;
+  rdfs:label "GroupBox for grouping device states and funcationalities" ;
+  rdfs:subClassOf owl:Thing ;
+.
 vicci:Health
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:Controllable ;
 .
 vicci:HealthMonitor
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf vicci:Health ;
 .
 vicci:HeartRateMeasurementState
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:ContinuousState ;
 .
 vicci:HeartRateMeasuringFunctionality
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:ContinuousControlFunctionality ;
 .
 vicci:HeartRateStateValue
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:ContinuousValue ;
 .
+vicci:MergedThing
+  a owl:Class ;
+  rdfs:label "Metaclass for two or more devices that are merged " ;
+  rdfs:subClassOf owl:Thing ;
+.
 vicci:POI
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:comment "Point of Interest is a helper, to locate the position of items" ;
   rdfs:subClassOf dogont:BuildingEnvironment ;
 .
 vicci:Person
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf vicci:ProteusThings ;
 .
 vicci:ProteusThings
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:Controllable ;
 .
 vicci:Robot
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf vicci:ProteusThings ;
 .
 vicci:RobotMovementFunctionality
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:ContinuousControlFunctionality ;
 .
 vicci:RobotMovementState
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:DiscreteState ;
 .
 vicci:RobotMovementStateValue
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:DiscreteValue ;
 .
 vicci:RobotPosition
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:comment "The position of a vicci robot" ;
   rdfs:subClassOf owl:Thing ;
 .
 vicci:RobotPositionCalculatingFunctionality
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:ContinuousControlFunctionality ;
 .
 vicci:RobotPositionState
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:DiscreteState ;
 .
 vicci:RobotPositionStateValue
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:subClassOf dogont:DiscreteValue ;
 .
 vicci:RobotSimplePositionState
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:label "Simple Position for Robots (only x, y needed and less precission)" ;
   rdfs:subClassOf dogont:DiscreteState ;
 .
 vicci:RobotSimplePositionStateValue
-  rdf:type owl:Class ;
+  a owl:Class ;
   rdfs:label "Simple Position for Robots (only x, y needed and less precission)" ;
   rdfs:subClassOf vicci:RobotPositionStateValue ;
 .
+vicci:grouBoxName
+  a owl:DatatypeProperty ;
+  rdfs:domain vicci:GroupBox ;
+  rdfs:label "Name property for a group box" ;
+  rdfs:range xsd:string ;
+.
 vicci:hasAge
-  rdf:type owl:ObjectProperty ;
+  a owl:ObjectProperty ;
   rdfs:domain [
-      rdf:type owl:Class ;
+      a owl:Class ;
       owl:unionOf (
           vicci:Person
         ) ;
@@ -130,9 +146,9 @@ vicci:hasAge
   rdfs:range xsd:string ;
 .
 vicci:hasFirstname
-  rdf:type owl:ObjectProperty ;
+  a owl:ObjectProperty ;
   rdfs:domain [
-      rdf:type owl:Class ;
+      a owl:Class ;
       owl:unionOf (
           vicci:Person
         ) ;
@@ -140,19 +156,25 @@ vicci:hasFirstname
   rdfs:range xsd:string ;
 .
 vicci:hasGender
-  rdf:type owl:ObjectProperty ;
+  a owl:ObjectProperty ;
   rdfs:domain [
-      rdf:type owl:Class ;
+      a owl:Class ;
       owl:unionOf (
           vicci:Person
         ) ;
     ] ;
   rdfs:range xsd:string ;
 .
+vicci:hasGroupBox
+  a owl:ObjectProperty ;
+  rdfs:domain dogont:Controllable ;
+  rdfs:label "GroupBox property for controllables" ;
+  rdfs:range vicci:GroupBox ;
+.
 vicci:hasHealthMonitor
-  rdf:type owl:ObjectProperty ;
+  a owl:ObjectProperty ;
   rdfs:domain [
-      rdf:type owl:Class ;
+      a owl:Class ;
       owl:unionOf (
           vicci:Person
         ) ;
@@ -160,9 +182,9 @@ vicci:hasHealthMonitor
   rdfs:range vicci:HealthMonitor ;
 .
 vicci:hasLastname
-  rdf:type owl:ObjectProperty ;
+  a owl:ObjectProperty ;
   rdfs:domain [
-      rdf:type owl:Class ;
+      a owl:Class ;
       owl:unionOf (
           vicci:Person
         ) ;
@@ -170,9 +192,9 @@ vicci:hasLastname
   rdfs:range xsd:string ;
 .
 vicci:hasOrientation
-  rdf:type owl:FunctionalProperty ;
+  a owl:FunctionalProperty ;
   rdfs:domain [
-      rdf:type owl:Class ;
+      a owl:Class ;
       owl:unionOf (
           vicci:RobotPosition
         ) ;
@@ -180,9 +202,9 @@ vicci:hasOrientation
   rdfs:range xsd:string ;
 .
 vicci:hasPosition
-  rdf:type owl:FunctionalProperty ;
+  a owl:FunctionalProperty ;
   rdfs:domain [
-      rdf:type owl:Class ;
+      a owl:Class ;
       owl:unionOf (
           vicci:RobotPosition
         ) ;
@@ -190,10 +212,10 @@ vicci:hasPosition
   rdfs:range xsd:string ;
 .
 vicci:hasRobotPosition
-  rdf:type owl:FunctionalProperty ;
+  a owl:FunctionalProperty ;
   rdfs:comment "Gives the location for a vicci robot (position + orientation)" ;
   rdfs:domain [
-      rdf:type owl:Class ;
+      a owl:Class ;
       owl:unionOf (
           dogont:BuildingThing
           dogont:BuildingEnvironment
@@ -202,13 +224,37 @@ vicci:hasRobotPosition
     ] ;
   rdfs:range vicci:RobotPosition ;
 .
+vicci:iconName
+  a owl:DatatypeProperty ;
+  rdfs:domain vicci:GroupBox ;
+  rdfs:label "Icon name property for a group box" ;
+  rdfs:range xsd:string ;
+.
 vicci:isAvailable
-  rdf:type owl:ObjectProperty ;
+  a owl:ObjectProperty ;
   rdfs:domain [
-      rdf:type owl:Class ;
+      a owl:Class ;
       owl:unionOf (
           vicci:ProteusThings
         ) ;
     ] ;
   rdfs:range xsd:boolean ;
+.
+vicci:isInGroupBox
+  a owl:ObjectProperty ;
+  rdfs:domain [
+      a owl:Class ;
+      owl:unionOf (
+          dogont:Functionality
+          dogont:State
+        ) ;
+    ] ;
+  rdfs:label "GroupBox property assigns funtionality or state to a GroupBox" ;
+  rdfs:range vicci:GroupBox ;
+.
+vicci:isMergedIn
+  a owl:ObjectProperty ;
+  rdfs:domain dogont:Controllable ;
+  rdfs:label "Describes to which meta device, this device belongs" ;
+  rdfs:range vicci:MergedThing ;
 .

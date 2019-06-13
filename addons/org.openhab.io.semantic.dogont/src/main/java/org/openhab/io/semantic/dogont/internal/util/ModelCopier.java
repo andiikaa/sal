@@ -51,6 +51,12 @@ public class ModelCopier {
             LOGGER.warn("cant get semantic template name for item '{}'", element.getName());
         }
 
+        // only checks if the first group box _1 is present.
+        // if not, all groupboxes are added
+        if (!instanceModelContainsGroupBox(templateName)) {
+            copyGroupBox(templateName);
+        }
+
         if (!instanceModelContainsState(element.getName())) {
             copyState(templateName, id);
         }
@@ -64,9 +70,9 @@ public class ModelCopier {
      * Copies the the state and all needed stuff from the template to the instance model.
      *
      * @param templateName
-     *            template name without id and function prefix
+     *                         template name without id and function prefix
      * @param id
-     *            id e.g. 'berlin'
+     *                         id e.g. 'berlin'
      */
     public void copyState(String templateName, String id) {
         LOGGER.debug("try to copy state '{}' from template", templateName);
@@ -85,9 +91,9 @@ public class ModelCopier {
      * Copies the the functionality and all needed stuff from the template to the instance model.
      *
      * @param templateName
-     *            template name without id and function prefix
+     *                         template name without id and function prefix
      * @param id
-     *            id e.g. 'berlin'
+     *                         id e.g. 'berlin'
      */
     public void copyFunction(String templateName, String id) {
         LOGGER.debug("try to copy function '{}' from template", templateName);
@@ -100,7 +106,24 @@ public class ModelCopier {
         } else {
             executeUpdateAction(getCopyThingAndAddFunctionQuery(templateName, id));
         }
+    }
 
+    /**
+     * Copy all group boxes.
+     * E.g. for tinkerforge
+     * tinkerforge_irTemp_1 and
+     * tinkerforge_irTemp_2 are copied
+     *
+     * @param templateName e.g. tinkerforge_irTemp
+     */
+    public void copyGroupBox(String templateName) {
+        if (templateName == null) {
+            return;
+        }
+        String thingName = removeLastDelimiter(templateName);
+        LOGGER.debug("try to copy groupBoxes for '{}' from template", thingName);
+        String query = getCopyGroupBoxQuery(thingName);
+        executeUpdateAction(query);
     }
 
     /**
@@ -162,6 +185,12 @@ public class ModelCopier {
         return executeAskOnInstanceModel(query);
     }
 
+    private boolean instanceModelContainsGroupBox(String groupBoxName) {
+        String thingName = removeLastDelimiter(groupBoxName);
+        String query = getContainsQuery(SemanticConstants.GROUP_BOX_PREFIX, thingName + "_1");
+        return executeAskOnInstanceModel(query);
+    }
+
     private boolean executeAskOnInstanceModel(String query) {
         Model instanceModel = dataset.getNamedModel(SemanticConstants.GRAPH_NAME_INSTANCE);
         Query q = QueryFactory.create(query);
@@ -219,6 +248,28 @@ public class ModelCopier {
         builder.append("  BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", ");
         builder.append("    STRAFTER (STR(?state),\"" + SemanticConstants.NS_TEMPLATE + "\"), \"_" + id
                 + "\")) AS ?newState) ");
+        builder.append("}}");
+        return builder.toString();
+    }
+
+    private static String getCopyGroupBoxQuery(String thingName) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("PREFIX dogont: <" + DogontSchema.NS + "> ");
+        builder.append("PREFIX instance: <" + SemanticConstants.NS_INSTANCE + "> ");
+        builder.append("PREFIX template: <" + SemanticConstants.NS_TEMPLATE + "> ");
+        builder.append("PREFIX rdf: <" + SemanticConstants.NS_RDF_SYNTAX + "> ");
+        builder.append("PREFIX vicci: <" + SemanticConstants.NS_VICCI_EXTENSION + "> ");
+        builder.append("INSERT { GRAPH <" + SemanticConstants.GRAPH_NAME_INSTANCE + "> { ");
+        builder.append("  ?newBox rdf:type ?boxType ; ");
+        builder.append("  vicci:grouBoxName ?boxName ; vicci:iconName ?iconName .");
+        builder.append("}}");
+        builder.append("WHERE { GRAPH <" + SemanticConstants.GRAPH_NAME_TEMPLATE + "> { ");
+        builder.append("  template:" + SemanticConstants.THING_PREFIX + thingName);
+        builder.append(" vicci:hasGroupBox ?box .");
+        builder.append(" ?box rdf:type ?boxType .");
+        builder.append(" ?box vicci:grouBoxName ?boxName ; vicci:iconName ?iconName .");
+        builder.append("BIND (URI(CONCAT (\"" + SemanticConstants.NS_INSTANCE + "\", STRAFTER (STR(?box),\"");
+        builder.append(SemanticConstants.NS_TEMPLATE + "\"))) AS ?newBox)");
         builder.append("}}");
         return builder.toString();
     }

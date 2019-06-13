@@ -29,6 +29,11 @@ public class SemanticConstants {
     public static final String NS_TEMPLATE = "http://openhab-semantic/0.1/template#";
 
     /**
+     * namespace for the vicci extension
+     */
+    public static final String NS_VICCI_EXTENSION = "http://openhab-semantic/0.1/dogont-vicci-extension#";
+
+    /**
      * Graph name for the instance graph
      */
     public static final String GRAPH_NAME_INSTANCE = "http://openhab-semantic/0.1/instance";
@@ -57,6 +62,11 @@ public class SemanticConstants {
      * Function_ prefix for individual names, of the type 'Functionality'
      */
     public static final String FUNCTION_PREFIX = "Function_";
+
+    /**
+     * GroupBox_ prefix for grouping functions and states
+     */
+    public static final String GROUP_BOX_PREFIX = "GroupBox_";
 
     /**
      * the complete prefix incl. dogont namespace and thing prefix for 'BuildingThings'

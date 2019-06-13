@@ -1,6 +1,7 @@
 # baseURI: http://openhab-semantic/0.1/template
 # imports: http://elite.polito.it/ontologies/dogont.owl
 # imports: http://openhab-semantic/0.1/dogont-vicci-extension
+# prefix: template
 
 @prefix dogont: <http://elite.polito.it/ontologies/dogont.owl#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -11,440 +12,482 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 dogont:State_fingerscanner_identify_c6faf529_channel_person
-  rdf:type rdf:Statement ;
+  a rdf:Statement ;
   rdf:predicate dogont:hasState ;
 .
 <http://openhab-semantic/0.1/template>
-  rdf:type owl:Ontology ;
+  a owl:Ontology ;
   owl:imports <http://elite.polito.it/ontologies/dogont.owl> ;
   owl:imports <http://openhab-semantic/0.1/dogont-vicci-extension> ;
   owl:versionInfo "Created with TopBraid Composer" ;
 .
 template:BloodOxygenSaturationStateValue_1
-  rdf:type vicci:BloodOxygenSaturationStateValue ;
+  a vicci:BloodOxygenSaturationStateValue ;
 .
 template:DisplayCommand_OpenHab
-  rdf:type dogont:DisplayCommand ;
+  a dogont:DisplayCommand ;
 .
 template:DownCommand_OpenHab
-  rdf:type dogont:DownCommand ;
+  a dogont:DownCommand ;
 .
 template:Function_fingerscanner_identify_channelIdentify
-  rdf:type dogont:IdentificationFunctionality ;
+  a dogont:IdentificationFunctionality ;
   dogont:hasCommand template:OffCommand_OpenHab ;
   dogont:hasCommand template:OnCommand_OpenHab ;
   dogont:hasCommand template:ToggleCommand_OpenHab ;
 .
 template:Function_fingerscanner_identify_channelPerson
-  rdf:type dogont:QueryFunctionality ;
+  a dogont:QueryFunctionality ;
 .
 template:Function_homematic_co2_co2
-  rdf:type dogont:Co2MeasurementFunctionality ;
+  a dogont:Co2MeasurementFunctionality ;
 .
 template:Function_homematic_dimmer_dimmer
-  rdf:type dogont:LevelControlFunctionality ;
+  a dogont:LevelControlFunctionality ;
   dogont:hasCommand template:DownCommand_OpenHab ;
   dogont:hasCommand template:OffCommand_OpenHab ;
   dogont:hasCommand template:OnCommand_OpenHab ;
   dogont:hasCommand template:UpCommand_OpenHab ;
 .
 template:Function_homematic_gong_gong
-  rdf:type dogont:AlertNotificationFunctionality ;
+  a dogont:AlertNotificationFunctionality ;
   dogont:hasNotification [
-      rdf:type dogont:AlertNotification ;
+      a dogont:AlertNotification ;
     ] ;
 .
 template:Function_homematic_gong_lightGong
-  rdf:type dogont:AlertNotificationFunctionality ;
+  a dogont:AlertNotificationFunctionality ;
 .
 template:Function_homematic_keymatic_keymatic
-  rdf:type dogont:OpenCloseFunctionality ;
+  a dogont:OpenCloseFunctionality ;
 .
 template:Function_homematic_motionIndicator_brightness
-  rdf:type dogont:LightSensingFunctionality ;
+  a dogont:LightSensingFunctionality ;
 .
 template:Function_homematic_motionIndicator_motionIndicator
-  rdf:type dogont:MovementNotificationFunctionality ;
+  a dogont:MovementNotificationFunctionality ;
+.
+template:Function_hue_hue_color
+  a dogont:ColorControlFunctionality ;
+  vicci:isInGroupBox template:GroupBox_hue_bulb210_1 ;
+.
+template:Function_hue_hue_dimmer
+  a dogont:LightRegulationFunctionality ;
+  vicci:isInGroupBox template:GroupBox_hue_bulb210_1 ;
+.
+template:Function_hue_hue_light
+  a dogont:OnOffFunctionality ;
+  vicci:isInGroupBox template:GroupBox_hue_bulb210_1 ;
 .
 template:Function_kodi_kodicontrol_guiShowNotification
-  rdf:type dogont:DisplayFunctionality ;
+  a dogont:DisplayFunctionality ;
   dogont:hasCommand template:DisplayCommand_OpenHab ;
 .
 template:Function_kodi_kodicontrol_playerPlayFile
-  rdf:type dogont:SoundFunctionality ;
+  a dogont:SoundFunctionality ;
   dogont:hasCommand template:PlayCommand_OpenHab ;
 .
 template:Function_kodi_kodicontrol_playerStop
-  rdf:type dogont:SoundFunctionality ;
+  a dogont:SoundFunctionality ;
   dogont:hasCommand template:StopPlayingCommand_OpenHab ;
 .
 template:Function_proteus_healthMonitor_emergencyButton
-  rdf:type vicci:CallHelpFunctionality ;
+  a vicci:CallHelpFunctionality ;
 .
 template:Function_proteus_turtle_move
-  rdf:type vicci:RobotMovementFunctionality ;
+  a vicci:RobotMovementFunctionality ;
 .
 template:Function_tinkerforge_ambientLight_ambientLight
-  rdf:type dogont:LightSensingFunctionality ;
+  a dogont:LightSensingFunctionality ;
 .
 template:Function_tinkerforge_irTemp_ambTemp
-  rdf:type dogont:TemperatureMeasurementFunctionality ;
+  a dogont:TemperatureMeasurementFunctionality ;
 .
 template:Function_tinkerforge_irTemp_irTemp
-  rdf:type dogont:TemperatureMeasurementFunctionality ;
+  a dogont:TemperatureMeasurementFunctionality ;
 .
 template:Function_tinkerforge_lcd_backlight
-  rdf:type dogont:OnOffFunctionality ;
+  a dogont:OnOffFunctionality ;
   dogont:hasCommand template:OffCommand_OpenHab ;
   dogont:hasCommand template:OnCommand_OpenHab ;
 .
 template:Function_tinkerforge_lcd_text
-  rdf:type dogont:DisplayFunctionality ;
+  a dogont:DisplayFunctionality ;
   dogont:hasCommand template:DisplayCommand_OpenHab ;
 .
 template:Function_yahooweather_weather_temperature
-  rdf:type dogont:TemperatureMeasurementFunctionality ;
+  a dogont:TemperatureMeasurementFunctionality ;
+.
+template:GroupBox_hue_bulb210_1
+  a vicci:GroupBox ;
+.
+template:GroupBox_tinkerforge_irTemp_1
+  a vicci:GroupBox ;
+  vicci:grouBoxName "Amb Temp" ;
+  vicci:iconName "Temp" ;
+.
+template:GroupBox_tinkerforge_irTemp_2
+  a vicci:GroupBox ;
+  vicci:grouBoxName "IR Temp" ;
+  vicci:iconName "Temp" ;
 .
 template:Kitchen_Mueller
-  rdf:type dogont:Kitchen ;
+  a dogont:Kitchen ;
   rdfs:label "Kueche" ;
 .
 template:LivingRoom_Mueller
-  rdf:type dogont:LivingRoom ;
+  a dogont:LivingRoom ;
   rdfs:label "Wohnzimmer" ;
 .
 template:Lobby_Mueller
-  rdf:type dogont:Lobby ;
+  a dogont:Lobby ;
   rdfs:label "Flur" ;
 .
 template:OffCommand_OpenHab
-  rdf:type dogont:OffCommand ;
+  a dogont:OffCommand ;
 .
 template:OnCommand_OpenHab
-  rdf:type dogont:OnCommand ;
+  a dogont:OnCommand ;
+.
+template:OnStateValue_1
+  a dogont:OnStateValue ;
 .
 template:PlayCommand_OpenHab
-  rdf:type dogont:PlayCommand ;
+  a dogont:PlayCommand ;
 .
 template:State_dummy_current_location
-  rdf:type dogont:PresenceState ;
+  a dogont:PresenceState ;
   dogont:hasStateValue [
-      rdf:type dogont:PresentStateValue ;
+      a dogont:PresentStateValue ;
       dogont:realStateValue "unknown" ;
     ] ;
 .
 template:State_fingerscanner_identify_channelPerson
-  rdf:type dogont:State ;
+  a dogont:State ;
   dogont:hasStateValue [
-      rdf:type dogont:AuthenticatedStateValue ;
+      a dogont:AuthenticatedStateValue ;
       dogont:realStateValue "unknown" ;
     ] ;
 .
 template:State_homematic_co2_co2
-  rdf:type dogont:Co2MeasurementState ;
+  a dogont:Co2MeasurementState ;
   dogont:hasStateValue [
-      rdf:type dogont:Co2MeasurementStateValue ;
+      a dogont:Co2MeasurementStateValue ;
       dogont:realStateValue "unknown" ;
     ] ;
 .
 template:State_homematic_dimmer_dimmer
-  rdf:type dogont:LevelState ;
+  a dogont:LevelState ;
   dogont:hasStateValue [
-      rdf:type dogont:LevelStateValue ;
+      a dogont:LevelStateValue ;
       dogont:realStateValue "0" ;
       dogont:unitOfMeasure <http://purl.oclc.org/NET/muo/ucum/unit/fraction/percent> ;
     ] ;
 .
 template:State_homematic_gong_gong
-  rdf:type dogont:DiscreteState ;
+  a dogont:DiscreteState ;
   dogont:hasStateValue [
-      rdf:type dogont:OnStateValue ;
+      a dogont:OnStateValue ;
       dogont:realStateValue "unknown" ;
     ] ;
 .
 template:State_homematic_gong_lightGong
-  rdf:type dogont:OnOffState ;
+  a dogont:OnOffState ;
   dogont:hasStateValue [
-      rdf:type dogont:OnStateValue ;
+      a dogont:OnStateValue ;
       dogont:realStateValue "unknown" ;
     ] ;
 .
 template:State_homematic_keymatic_keymatic
-  rdf:type dogont:OpenCloseState ;
+  a dogont:OpenCloseState ;
   dogont:hasStateValue [
-      rdf:type dogont:OpenStateValue ;
+      a dogont:OpenStateValue ;
       dogont:realStateValue "unknown" ;
     ] ;
 .
 template:State_homematic_motionIndicator_brightness
-  rdf:type dogont:LightIntensityState ;
+  a dogont:LightIntensityState ;
   dogont:hasStateValue [
-      rdf:type dogont:BrightnessStateValue ;
+      a dogont:BrightnessStateValue ;
       dogont:realStateValue "0" ;
       dogont:unitOfMeasure <http://purl.oclc.org/NET/muo/ucum/unit/illuminance/lux> ;
     ] ;
 .
 template:State_homematic_motionIndicator_motionIndicator
-  rdf:type dogont:MovementState ;
+  a dogont:MovementState ;
   dogont:hasStateValue [
-      rdf:type dogont:MovingStateValue ;
+      a dogont:MovingStateValue ;
       dogont:realStateValue "0" ;
     ] ;
 .
-template:State_libnfcwrapper_idscan_idscanResultChannel
-  rdf:type dogont:PresenceState ;
+template:State_hue_light
+  a dogont:OnOffState ;
   dogont:hasStateValue [
-      rdf:type dogont:AuthenticatedStateValue ;
+      a dogont:OnStateValue ;
+      dogont:realStateValue "UNDEF" ;
+    ] ;
+  vicci:isInGroupBox template:GroupBox_hue_bulb210_1 ;
+.
+template:State_libnfcwrapper_idscan_idscanResultChannel
+  a dogont:PresenceState ;
+  dogont:hasStateValue [
+      a dogont:AuthenticatedStateValue ;
       dogont:realStateValue "unknown" ;
     ] ;
 .
 template:State_proteus_healthMonitor_emergencyButton
-  rdf:type vicci:CallHelpState ;
+  a vicci:CallHelpState ;
   dogont:hasStateValue [
-      rdf:type dogont:OnStateValue ;
+      a dogont:OnStateValue ;
       dogont:realStateValue "OFF" ;
     ] ;
 .
 template:State_proteus_healthMonitor_heartRate
-  rdf:type vicci:HeartRateMeasurementState ;
+  a vicci:HeartRateMeasurementState ;
   dogont:hasStateValue [
-      rdf:type vicci:HeartRateStateValue ;
+      a vicci:HeartRateStateValue ;
       dogont:realStateValue "0" ;
     ] ;
 .
 template:State_proteus_healthMonitor_oxygenSaturation
-  rdf:type vicci:BloodOxygenSaturationMeasurementState ;
+  a vicci:BloodOxygenSaturationMeasurementState ;
   dogont:hasStateValue [
-      rdf:type vicci:BloodOxygenSaturationStateValue ;
+      a vicci:BloodOxygenSaturationStateValue ;
       dogont:realStateValue "0" ;
     ] ;
 .
 template:State_proteus_person_availability
-  rdf:type vicci:AvailabilityState ;
+  a vicci:AvailabilityState ;
   dogont:hasStateValue [
-      rdf:type vicci:AvailabilityStateValue ;
+      a vicci:AvailabilityStateValue ;
       dogont:realStateValue "unavailable" ;
     ] ;
 .
 template:State_proteus_person_simplePosition
-  rdf:type vicci:RobotSimplePositionState ;
+  a vicci:RobotSimplePositionState ;
   dogont:hasStateValue [
-      rdf:type vicci:RobotSimplePositionStateValue ;
-      dogont:realStateValue "P: 0.00 0.00 O: 0.00 0.00"^^xsd:string ;
+      a vicci:RobotSimplePositionStateValue ;
       rdfs:label "Simple Position for Robots (only x, y needed and less precission)" ;
     ] ;
   rdfs:label "Simple Position for Robots (only x, y needed and less precission)" ;
 .
 template:State_proteus_turtle_availability
-  rdf:type vicci:AvailabilityState ;
+  a vicci:AvailabilityState ;
   dogont:hasStateValue [
-      rdf:type vicci:AvailabilityStateValue ;
+      a vicci:AvailabilityStateValue ;
       dogont:realStateValue "available" ;
     ] ;
 .
 template:State_proteus_turtle_currentLocation
-  rdf:type vicci:RobotPositionState ;
+  a vicci:RobotPositionState ;
   dogont:hasStateValue [
-      rdf:type vicci:RobotPositionStateValue ;
+      a vicci:RobotPositionStateValue ;
       dogont:realStateValue "P: 0.00 0.00 O: 0.00 0.00" ;
     ] ;
 .
 template:State_proteus_turtle_movement
-  rdf:type vicci:RobotMovementState ;
+  a vicci:RobotMovementState ;
   dogont:hasStateValue [
-      rdf:type vicci:RobotMovementStateValue ;
+      a vicci:RobotMovementStateValue ;
       dogont:realStateValue "Null" ;
     ] ;
 .
 template:State_proteus_turtle_simplePosition
-  rdf:type vicci:RobotSimplePositionState ;
+  a vicci:RobotSimplePositionState ;
   dogont:hasStateValue [
-      rdf:type vicci:RobotSimplePositionStateValue ;
-      dogont:realStateValue "P: 0.00 0.00 O: 0.00 0.00"^^xsd:string ;
+      a vicci:RobotSimplePositionStateValue ;
       rdfs:label "Simple Position for Robots (only x, y needed and less precission)" ;
     ] ;
   rdfs:label "Simple Position for Robots (only x, y needed and less precission)" ;
 .
 template:State_tinkerforge_ambientLight_ambientLight
-  rdf:type dogont:LightIntensityState ;
+  a dogont:LightIntensityState ;
   dogont:hasStateValue [
-      rdf:type dogont:BrightnessStateValue ;
+      a dogont:BrightnessStateValue ;
       dogont:realStateValue "0" ;
       dogont:unitOfMeasure <http://purl.oclc.org/NET/muo/ucum/unit/illuminance/lux> ;
     ] ;
 .
 template:State_tinkerforge_barometer_barometer
-  rdf:type dogont:PressureState ;
+  a dogont:PressureState ;
   dogont:hasStateValue [
-      rdf:type dogont:PressureStateValue ;
+      a dogont:PressureStateValue ;
       dogont:realStateValue "0" ;
       dogont:unitOfMeasure <http://purl.oclc.org/NET/muo/ucum/unit/pressure/bar> ;
     ] ;
 .
 template:State_tinkerforge_humidity_humidity
-  rdf:type dogont:HumidityMeasurementState ;
+  a dogont:HumidityMeasurementState ;
   dogont:hasStateValue [
-      rdf:type dogont:HumidityStateValue ;
+      a dogont:HumidityStateValue ;
       dogont:realStateValue "0" ;
       dogont:unitOfMeasure <http://purl.oclc.org/NET/muo/ucum/unit/fraction/percent> ;
     ] ;
 .
 template:State_tinkerforge_irTemp_ambTemp
-  rdf:type dogont:TemperatureState ;
+  a dogont:TemperatureState ;
   dogont:hasStateValue [
-      rdf:type dogont:TemperatureStateValue ;
+      a dogont:TemperatureStateValue ;
       dogont:realStateValue "0" ;
       dogont:unitOfMeasure <http://purl.oclc.org/NET/muo/ucum/unit/temperature/degree-Celsius> ;
     ] ;
+  vicci:isInGroupBox template:GroupBox_tinkerforge_irTemp_1 ;
 .
 template:State_tinkerforge_irTemp_irTemp
-  rdf:type dogont:TemperatureState ;
+  a dogont:TemperatureState ;
   dogont:hasStateValue [
-      rdf:type dogont:TemperatureStateValue ;
+      a dogont:TemperatureStateValue ;
       dogont:realStateValue "0" ;
       dogont:unitOfMeasure <http://purl.oclc.org/NET/muo/ucum/unit/temperature/degree-Celsius> ;
     ] ;
+  vicci:isInGroupBox template:GroupBox_tinkerforge_irTemp_2 ;
 .
 template:State_tinkerforge_lcd_backlight
-  rdf:type dogont:OnOffState ;
+  a dogont:OnOffState ;
   dogont:hasStateValue [
-      rdf:type dogont:OffStateValue ;
+      a dogont:OffStateValue ;
       dogont:realStateValue "0" ;
     ] ;
 .
 template:State_tinkerforge_lcd_text
-  rdf:type dogont:DiscreteState ;
+  a dogont:DiscreteState ;
   dogont:hasStateValue [
-      rdf:type dogont:DiscreteValue ;
+      a dogont:DiscreteValue ;
       dogont:realStateValue " " ;
     ] ;
 .
 template:State_yahooweather_weather_humidity
-  rdf:type dogont:HumidityMeasurementState ;
+  a dogont:HumidityMeasurementState ;
   dogont:hasStateValue [
-      rdf:type dogont:HumidityStateValue ;
+      a dogont:HumidityStateValue ;
       dogont:realStateValue "0" ;
     ] ;
 .
 template:State_yahooweather_weather_temperature
-  rdf:type dogont:TemperatureState ;
+  a dogont:TemperatureState ;
   dogont:hasStateValue [
-      rdf:type dogont:TemperatureStateValue ;
+      a dogont:TemperatureStateValue ;
       dogont:realStateValue "0" ;
       dogont:unitOfMeasure <http://purl.oclc.org/NET/muo/ucum/unit/temperature/degree-Celsius> ;
     ] ;
 .
 template:StopPlayingCommand_OpenHab
-  rdf:type dogont:StopPlayingCommand ;
+  a dogont:StopPlayingCommand ;
 .
 template:Thing_dummy_current
-  rdf:type dogont:PresenceSensor ;
+  a dogont:PresenceSensor ;
   dogont:hasState template:State_dummy_current_location ;
 .
 template:Thing_fingerscanner_identify
-  rdf:type dogont:AccessControlSystem ;
+  a dogont:AccessControlSystem ;
   dogont:hasFunctionality template:Function_fingerscanner_identify_channelIdentify ;
   dogont:hasFunctionality template:Function_fingerscanner_identify_channelPerson ;
   dogont:hasState template:State_fingerscanner_identify_channelPerson ;
 .
 template:Thing_homematic_co2
-  rdf:type dogont:Co2Sensor ;
+  a dogont:Co2Sensor ;
   dogont:hasFunctionality template:Function_homematic_co2_co2 ;
   dogont:hasState template:State_homematic_co2_co2 ;
 .
 template:Thing_homematic_dimmer
-  rdf:type dogont:DimmerSwitch ;
+  a dogont:DimmerSwitch ;
   dogont:hasFunctionality template:Function_homematic_dimmer_dimmer ;
   dogont:hasState template:State_homematic_dimmer_dimmer ;
 .
 template:Thing_homematic_gong
-  rdf:type dogont:Buzzer ;
+  a dogont:Buzzer ;
   dogont:hasFunctionality template:Function_homematic_gong_gong ;
   dogont:hasFunctionality template:Function_homematic_gong_lightGong ;
   dogont:hasState template:State_homematic_gong_gong ;
   dogont:hasState template:State_homematic_gong_lightGong ;
 .
 template:Thing_homematic_keymatic
-  rdf:type dogont:DoorActuator ;
+  a dogont:DoorActuator ;
   dogont:hasFunctionality template:Function_homematic_keymatic_keymatic ;
   dogont:hasState template:State_homematic_keymatic_keymatic ;
 .
 template:Thing_homematic_motionIndicator
-  rdf:type dogont:MovementSensor ;
+  a dogont:MovementSensor ;
   dogont:hasFunctionality template:Function_homematic_motionIndicator_brightness ;
   dogont:hasFunctionality template:Function_homematic_motionIndicator_motionIndicator ;
   dogont:hasState template:State_homematic_motionIndicator_brightness ;
   dogont:hasState template:State_homematic_motionIndicator_motionIndicator ;
 .
+template:Thing_hue_bulb210
+  a dogont:ColorDimmableLight ;
+  dogont:hasFunctionality template:Function_hue_hue_color ;
+  dogont:hasFunctionality template:Function_hue_hue_dimmer ;
+  dogont:hasFunctionality template:Function_hue_hue_light ;
+  dogont:hasState template:State_hue_light ;
+  vicci:hasGroupBox template:GroupBox_hue_bulb210_1 ;
+.
 template:Thing_kodi_kodicontrol
-  rdf:type dogont:Tv ;
+  a dogont:Tv ;
   dogont:hasFunctionality template:Function_kodi_kodicontrol_guiShowNotification ;
   dogont:hasFunctionality template:Function_kodi_kodicontrol_playerPlayFile ;
   dogont:hasFunctionality template:Function_kodi_kodicontrol_playerStop ;
 .
 template:Thing_libnfcwrapper_idscan
-  rdf:type dogont:AccessControlSystem ;
+  a dogont:AccessControlSystem ;
   dogont:hasState template:State_libnfcwrapper_idscan_idscanResultChannel ;
 .
 template:Thing_proteus_healthMonitor
-  rdf:type vicci:HealthMonitor ;
+  a vicci:HealthMonitor ;
   dogont:hasFunctionality template:Function_proteus_healthMonitor_emergencyButton ;
   dogont:hasState template:State_proteus_healthMonitor_emergencyButton ;
   dogont:hasState template:State_proteus_healthMonitor_heartRate ;
   dogont:hasState template:State_proteus_healthMonitor_oxygenSaturation ;
 .
 template:Thing_proteus_person
-  rdf:type vicci:Person ;
+  a vicci:Person ;
   dogont:hasState template:State_proteus_person_availability ;
-  dogont:hasState template:State_proteus_person_simplePosition ;
 .
 template:Thing_proteus_turtle
-  rdf:type vicci:Robot ;
+  a vicci:Robot ;
   dogont:hasFunctionality template:Function_proteus_turtle_move ;
   dogont:hasState template:State_proteus_turtle_availability ;
   dogont:hasState template:State_proteus_turtle_currentLocation ;
   dogont:hasState template:State_proteus_turtle_movement ;
-  dogont:hasState template:State_proteus_turtle_simplePosition ;
 .
 template:Thing_tinkerforge_ambientLight
-  rdf:type dogont:LightSensor ;
+  a dogont:LightSensor ;
   dogont:hasFunctionality template:Function_tinkerforge_ambientLight_ambientLight ;
   dogont:hasState template:State_tinkerforge_ambientLight_ambientLight ;
 .
 template:Thing_tinkerforge_barometer
-  rdf:type dogont:PressureSensor ;
+  a dogont:PressureSensor ;
   dogont:hasState template:State_tinkerforge_barometer_barometer ;
 .
 template:Thing_tinkerforge_humidity
-  rdf:type dogont:HumiditySensor ;
+  a dogont:HumiditySensor ;
   dogont:hasState template:State_tinkerforge_humidity_humidity ;
 .
 template:Thing_tinkerforge_irTemp
-  rdf:type dogont:MultipleTemperatureSensor ;
-  dogont:hasFunctionality template:Function_tinkerforge_irTemp_ambTemp ;
-  dogont:hasFunctionality template:Function_tinkerforge_irTemp_irTemp ;
+  a dogont:MultipleTemperatureSensor ;
   dogont:hasState template:State_tinkerforge_irTemp_ambTemp ;
   dogont:hasState template:State_tinkerforge_irTemp_irTemp ;
+  vicci:hasGroupBox template:GroupBox_tinkerforge_irTemp_1 ;
+  vicci:hasGroupBox template:GroupBox_tinkerforge_irTemp_2 ;
 .
 template:Thing_tinkerforge_lcd
-  rdf:type dogont:Communication ;
+  a dogont:Communication ;
   dogont:hasFunctionality template:Function_tinkerforge_lcd_backlight ;
   dogont:hasFunctionality template:Function_tinkerforge_lcd_text ;
   dogont:hasState template:State_tinkerforge_lcd_backlight ;
   dogont:hasState template:State_tinkerforge_lcd_text ;
 .
 template:Thing_yahooweather_weather
-  rdf:type dogont:SingleTemperatureSensor ;
+  a dogont:SingleTemperatureSensor ;
   dogont:hasFunctionality template:Function_yahooweather_weather_temperature ;
   dogont:hasState template:State_yahooweather_weather_humidity ;
   dogont:hasState template:State_yahooweather_weather_temperature ;
 .
 template:ToggleCommand_OpenHab
-  rdf:type dogont:ToggleCommand ;
+  a dogont:ToggleCommand ;
 .
 template:UpCommand_OpenHab
-  rdf:type dogont:UpCommand ;
+  a dogont:UpCommand ;
 .
 template:homematic_radio_controlled_socket_adapter
-  rdf:type owl:Thing ;
+  a owl:Thing ;
 .
