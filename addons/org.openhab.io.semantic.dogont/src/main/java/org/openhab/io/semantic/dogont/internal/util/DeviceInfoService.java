@@ -15,7 +15,7 @@ public class DeviceInfoService {
         internalDeviceInfo = getDeviceInfosInternal();
     }
 
-    public List<DeviceInfo> getDeviceInfos(String thingId) {
+    public List<DeviceInfo> getDeviceInfos() {
         return internalDeviceInfo;
     }
 
