@@ -484,4 +484,23 @@ public class QueryResource {
         builder.append("}");
         return builder.toString();
     }
+
+    public static final String getDeviceFuncAll(String funcId) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Prefix);
+        builder.append("SELECT ?cmd ?cName ?label ?cmdLabel ?funcType ?cmdType ?box ");
+        builder.append("WHERE {");
+        builder.append("  ?thing dogont:hasFunctionality ?func . ");
+        builder.append("  ?func rdf:type ?funcType . ");
+        builder.append("  OPTIONAL { ?func vicci:isInGroupBox ?box . } ");
+        builder.append("  OPTIONAL { ?func rdfs:label ?label . } ");
+        builder.append("  OPTIONAL { ?func dogont:hasCommand ?cmd . } ");
+        builder.append("  OPTIONAL { ?cmd dogont:realCommandName ?cName . } ");
+        builder.append("  OPTIONAL { ?cmd rdfs:label ?cmdLabel . }  ");
+        builder.append("  OPTIONAL { ?cmd rdf:type ?cmdType . } ");
+        builder.append("  FILTER(?func = <http://openhab-semantic/0.1/instance#" + funcId + ">)");
+        builder.append("}");
+
+        return builder.toString();
+    }
 }

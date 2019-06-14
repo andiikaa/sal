@@ -55,7 +55,7 @@ public class DeviceInfoService {
         irTempState.UnitOfMeasure = degree;
         irTempState.RealStateValue = "20";
         irTempState.StateType = "dogont:TemperatureState";
-        irTempState.GroupBox = boxIr;
+        irTempState.GroupBoxId = boxIr.Uid;
 
         DeviceState ambTempState = new DeviceState();
         ambTempState.ItemId = "tinkerforge_irTemp_ambTemp_1";
@@ -63,7 +63,7 @@ public class DeviceInfoService {
         ambTempState.UnitOfMeasure = degree;
         ambTempState.RealStateValue = "15";
         ambTempState.StateType = "dogont:TemperatureState";
-        ambTempState.GroupBox = boxAmb;
+        ambTempState.GroupBoxId = boxAmb.Uid;
 
         tinkerforgeIrTemp.States = new DeviceState[] { irTempState, ambTempState };
         tinkerforgeIrTemp.GroupBoxes = new GroupBox[] { boxAmb, boxIr };

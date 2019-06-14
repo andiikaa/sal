@@ -14,6 +14,8 @@ import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.TypeParser;
 import org.openhab.io.semantic.core.SemanticService;
+import org.openhab.io.semantic.core.model.SimpleDeviceModel.DeviceCommand;
+import org.openhab.io.semantic.core.model.SimpleDeviceModel.DeviceFunctionality;
 import org.openhab.io.semantic.core.model.SimpleDeviceModel.DeviceInfo;
 import org.openhab.io.semantic.core.util.QueryResult;
 import org.openhab.io.semantic.dogont.internal.SemanticServiceImplBase;
@@ -34,6 +36,7 @@ import com.hp.hpl.jena.query.ResultSetFactory;
 import com.hp.hpl.jena.query.ResultSetRewindable;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateFactory;
 import com.hp.hpl.jena.update.UpdateRequest;
@@ -351,6 +354,7 @@ public final class SemanticServiceImpl extends SemanticServiceImplBase implement
     // we must also handle that
     @Override
     public List<DeviceInfo> getDeviceInfoForId(String deviceId) {
+        List<DeviceInfo> results = new ArrayList<DeviceInfo>();
         String queryStr = QueryResource.getDeviceFunc(SemanticConstants.THING_PREFIX + deviceId);
         List<String> funcs = getStateOrFuncOrBox(deviceId, "func", queryStr);
         queryStr = QueryResource.getDeviceState(SemanticConstants.THING_PREFIX + deviceId);
@@ -359,8 +363,70 @@ public final class SemanticServiceImpl extends SemanticServiceImplBase implement
         List<String> boxes = getStateOrFuncOrBox(deviceId, "box", queryStr);
 
         DeviceInfo info = new DeviceInfo();
+        info.Functionalities = getFuncs(funcs).toArray(new DeviceFunctionality[funcs.size()]);
+        // TODO states need temperature via ucum...this is not working at the moment
+        results.add(info);
+        return results;
+    }
 
-        return new ArrayList<DeviceInfo>();
+    private List<DeviceFunctionality> getFuncs(List<String> funcNames) {
+        List<DeviceFunctionality> funcs = new ArrayList<>();
+
+        try {
+            openHabDataSet.begin(ReadWrite.READ);
+            for (String funcName : funcNames) {
+                QueryExecution funcQE = getQueryExecution(QueryResource.getDeviceFuncAll(funcName));
+                ResultSet funcRs = funcQE.execSelect();
+                DeviceFunctionality tmpFunc = mapFunc(funcName, funcRs);
+                funcQE.close();
+                funcs.add(tmpFunc);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            openHabDataSet.end();
+        }
+        return funcs;
+    }
+
+    private DeviceFunctionality mapFunc(String funcId, ResultSet resultSet) {
+        DeviceFunctionality result = new DeviceFunctionality();
+        List<DeviceCommand> cmds = new ArrayList<>();
+        result.ItemId = funcId.replace(SemanticConstants.FUNCTION_PREFIX, "");
+
+        while (resultSet.hasNext()) {
+            QuerySolution solution = resultSet.next();
+            result.Label = getStringOrNullFromLiteral(solution, "label");
+            result.GroupBoxId = getLocalNameOrNullFromResource(solution, "box");
+            result.FunctionalityType = getLocalNameOrNullFromResource(solution, "funcType");
+
+            DeviceCommand cmd = new DeviceCommand();
+            cmd.RealCommandName = getStringOrNullFromLiteral(solution, "cName");
+            cmd.CommandType = getLocalNameOrNullFromResource(solution, "cmdType");
+            cmd.Label = getStringOrNullFromLiteral(solution, "cmdLabel");
+            cmd.Name = getLocalNameOrNullFromResource(solution, "cmd");
+            cmds.add(cmd);
+        }
+
+        result.Commands = cmds.toArray(new DeviceCommand[cmds.size()]);
+        return result;
+    }
+
+    private static String getStringOrNullFromLiteral(QuerySolution solution, String name) {
+        Literal lit = solution.getLiteral(name);
+        if (lit == null) {
+            return null;
+        }
+        return lit.getString();
+    }
+
+    private static String getLocalNameOrNullFromResource(QuerySolution solution, String name) {
+        Resource res = solution.getResource(name);
+        if (res == null) {
+            return null;
+        }
+        return res.getLocalName();
     }
 
     private List<String> getStateOrFuncOrBox(String deviceId, String fieldName, String qeryStr) {
@@ -370,7 +436,10 @@ public final class SemanticServiceImpl extends SemanticServiceImplBase implement
             QueryExecution queryExecution = getQueryExecution(qeryStr);
             ResultSet rs = queryExecution.execSelect();
             if (rs.hasNext()) {
-                list.add(rs.next().getResource("func").toString());
+                Resource tmpRes = rs.next().getResource(fieldName);
+                if (tmpRes != null) {
+                    list.add(tmpRes.getLocalName());
+                }
             }
             queryExecution.close();
         } catch (Exception e) {

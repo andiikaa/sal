@@ -23,7 +23,7 @@ public class SimpleDeviceModel {
         public String FunctionalityType;
         public String ItemId;
         public DeviceCommand[] Commands;
-        public GroupBox GroupBox;
+        public String GroupBoxId;
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public class SimpleDeviceModel {
         public String RealStateValue;
         public String ItemId;
         public UnitOfMeasure UnitOfMeasure;
-        public GroupBox GroupBox;
+        public String GroupBoxId;
     }
 
     /// <summary>
